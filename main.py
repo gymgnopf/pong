@@ -2,6 +2,7 @@ import pygame
 from constants import *
 from paddle import Paddle
 from ball import Ball
+from text import Text
 
 def main():
     pygame.init()
@@ -15,10 +16,12 @@ def main():
     draw_group = pygame.sprite.Group()
     update_group = pygame.sprite.Group()
     paddle_group = pygame.sprite.Group()
+    text_group = pygame.sprite.Group()
 
     # Containers
     Paddle.containers = (paddle_group, draw_group, update_group)
     Ball.containers = (draw_group, update_group)
+    Text.containers = (draw_group, text_group)
 
     # Frames / Times
     clock = pygame.time.Clock()
@@ -28,6 +31,7 @@ def main():
     player_paddle = Paddle(10, VIRTUAL_HEIGHT / 2 - PADDLE_HEIGHT / 2, PADDLE_WIDTH, PADDLE_HEIGHT)
     cpu_paddle = Paddle(VIRTUAL_WIDTH - 10, VIRTUAL_HEIGHT / 2 - PADDLE_HEIGHT / 2, PADDLE_WIDTH, PADDLE_HEIGHT)
     ball = Ball(VIRTUAL_WIDTH / 2 - 2, VIRTUAL_HEIGHT / 2 - 2, BALL_WIDTH, BALL_HEIGHT) 
+    score_text = Text("Pong", VIRTUAL_WIDTH / 2, 20)
 
     # Game state
     game_state = "start"
@@ -48,6 +52,9 @@ def main():
 
         for obj in update_group:
             obj.update(dt, game_state)
+        
+        for obj in text_group:
+            obj.update("Test")
         
         for obj in paddle_group: 
             if obj.collides(ball):
